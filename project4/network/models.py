@@ -20,7 +20,7 @@ class Post(models.Model):
 
 
 class Following(models.Model):
-    target = target = models.ForeignKey(
+    target = models.ForeignKey(
         User,
         related_name='followers',
         on_delete=models.CASCADE
@@ -30,3 +30,6 @@ class Following(models.Model):
         related_name='targets',
         on_delete=models.CASCADE
     )
+
+    class Meta:
+        unique_together = (('target','follower'),)

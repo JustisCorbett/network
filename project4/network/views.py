@@ -75,7 +75,7 @@ def register(request):
 @login_required
 def create_post(request):
 
-    if request.method == POST:
+    if request.method == "POST":
         # Gather data and save post, return error if save fails
         text = request.POST["text"]
         user = request.user
@@ -97,5 +97,21 @@ def create_post(request):
         return render(request, "network/create_post.html")
 
 
+@login_required
+def follow(request):
     
+    if request.method != "PUT":
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
+    else:
+        data = json.loads(request.body)
+        
+        target = data.get("target")
+        follower = request.user
+        
+        follow = Following(
+            target=target,
+            follower=follower
+        )
 
