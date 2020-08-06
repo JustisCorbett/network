@@ -12,7 +12,7 @@ from .models import User, Post, Following
 
 
 def index(request):
-    posts = Post.objects.order_by("-timestamp").annotate(num_likes=Count('likes')).all()
+    posts = Post.objects.order_by("-date").annotate(num_likes=Count('likes')).all()
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
     page_number = request.GET.get("page")
@@ -74,25 +74,27 @@ def register(request):
 
 @login_required
 def create_post(request):
-    # Post must be sent via post
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
 
-    # Gather data and save post, return error if save fails
-    data = json.loads(request.body)
-    text = data.get("text", "")
-    user = request.user
+    if request.method == POST:
+        # Gather data and save post, return error if save fails
+        text = request.POST["text"]
+        user = request.user
 
-    post = Post(
-        user=user,
-        text=text
-    )
-    try:
-        post.save()
-    except IntegrityError:
-        return JsonResponse({"error": "Post exceeds max amount of characters!"}, status=400)
+        post = Post(
+            user=user,
+            text=text
+        )
 
-    return JsonResponse({"message": "Post saved successfully!"}, status=201)
+        try:
+            post.save()
+        except IntegrityError:
+            return render(request, "network/create_post.html", {
+                "message": "Post exceeds max amount of characters!"
+                })
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "network/create_post.html")
 
 
     
