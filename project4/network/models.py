@@ -13,7 +13,10 @@ class Post(models.Model):
     )
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField(max_length=255)
-    likes = models.ManyToManyField(User)
+    likes = models.ManyToManyField(
+        User,
+        related_name='likers',
+    )
 
 
 class Following(models.Model):

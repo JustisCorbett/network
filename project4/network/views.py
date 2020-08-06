@@ -1,16 +1,23 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-import json
+from django.db.models import Count
+from django.core.paginator import Paginator
 
 from .models import User, Post, Following
 
 
 def index(request):
-    return render(request, "network/index.html")
+    posts = Post.objects.order_by("-timestamp").annotate(num_likes=Count('likes')).all()
+    paginator = Paginator(posts, 10) # Show 10 posts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/index.html", {"page_obj": page_obj})
 
 
 def login_view(request):
@@ -71,6 +78,7 @@ def create_post(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
+    # Gather data and save post, return error if save fails
     data = json.loads(request.body)
     text = data.get("text", "")
     user = request.user
