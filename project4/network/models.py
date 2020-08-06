@@ -12,7 +12,7 @@ class Post(models.Model):
         on_delete=models.CASCADE
     )
     date = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
+    text = models.TextField(max_length=255)
     likes = models.ManyToManyField(User)
 
 
