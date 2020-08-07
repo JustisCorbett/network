@@ -194,5 +194,6 @@ def edit_post(request):
                 "error": "Post cant be updated!"
             }, status=400)
         return JsonResponse({
-            "success": "Post updated!"
+            "success": "Post updated!",
+            "post": post
         }, status=200)
