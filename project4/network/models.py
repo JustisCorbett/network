@@ -19,10 +19,6 @@ class Post(models.Model):
         blank=True
     )
 
-    @property
-    def num_likes(self):
-        return self.likes.count()
-
 
 class Following(models.Model):
     target = models.ForeignKey(
