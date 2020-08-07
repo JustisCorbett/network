@@ -12,7 +12,7 @@ from .models import User, Post, Following
 
 
 def index(request):
-    posts = Post.objects.order_by("-date").all()
+    posts = Post.objects.order_by("-date").all().annotate(num_posts=Count("likes"))
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
     page_number = request.GET.get("page")

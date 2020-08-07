@@ -4,8 +4,9 @@
     TODO
     {% for post in page_obj %}
         <div class="post" id="{{ post.id }}">
-            <h5>{{ post.user }} </h5>
-        {{ post.user }}
+            <h6>{{ post.user }} posted at {{ post.date}}</h6>
+            <p>{{ post.text }}</p>
+            
         </div>
     {% endfor %}
     <div class="pagination">
