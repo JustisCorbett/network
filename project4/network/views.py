@@ -102,7 +102,6 @@ def follow(request):
     
     data = json.loads(request.body)
     # get json data and determine if we add or remove m2m relation
-    is_following = data.get("is_following")
     target = data.get("target")
     follower = request.user
 
@@ -170,3 +169,30 @@ def like(request):
         return JsonResponse({
             "error": "Must use PUT or DELETE"
         }, status=400)
+
+
+@login_required
+def edit_post(request):
+
+    if request.method != "PUT":
+        return JsonResponse({
+            "error": "Must use PUT to edit post"
+        }, status=400)
+    else:
+        data = json.loads(request.body)
+        post_id = data.get("post_id")
+        post_text = data.get("text")
+        user = request.user
+        # make sure the user editing the post is the creator
+        post = get_object_or_404(Post, pk=post_id, user=user)
+
+        post.text = post_text
+        try:
+            post.save()
+        except IntegrityError:
+            return JsonResponse({
+                "error": "Post cant be updated!"
+            }, status=400)
+        return JsonResponse({
+            "success": "Post updated!"
+        }, status=200)
