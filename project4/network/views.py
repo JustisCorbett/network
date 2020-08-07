@@ -107,8 +107,9 @@ def follow(request):
     follower = request.user
 
     if request.method == "DELETE":
+        follow = get_object_or_404(Following, target=target, follower=follower)
         try:
-            follow = Following.objects.get(target=target, follower=follower).delete()
+            follow.delete()
         except IntegrityError:
             return JsonResponse({
                 "error": "Delete following unsuccessful, check if right data."
