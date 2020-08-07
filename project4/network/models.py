@@ -18,6 +18,10 @@ class Post(models.Model):
         related_name='liker',
     )
 
+    @property
+    def num_likes(self):
+        return self.likes.all().count()
+
 
 class Following(models.Model):
     target = models.ForeignKey(
