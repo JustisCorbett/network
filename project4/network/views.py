@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.db.models import Count
 from django.core.paginator import Paginator
@@ -12,7 +12,7 @@ from .models import User, Post, Following
 
 
 def index(request):
-    posts = Post.objects.order_by("-date").annotate(num_likes=Count('likes')).all()
+    posts = Post.objects.order_by("-date").all()
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
     page_number = request.GET.get("page")
@@ -140,36 +140,29 @@ def follow(request):
 @login_required
 def like(request):
     
-    if request.method != "PUT":
+    # get json data to query db for post objects, and determine if we add or remove m2m relation
+    data = json.loads(request.body)
+    post_id = data.get("post_id")
+    liker = request.user
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.method == "DELETE":
+        try:
+            post.likes.remove(liker)
+        except IntegrityError:
+            return JsonResponse({
+                "error": "Delete like unsuccessful, check if right data."
+            }, status=400)
         return JsonResponse({
-            "error": "PUT request required."
-        }, status=405)
-    else:
-        # get json data to query db for post objects, and determine if we add or remove m2m relation
-        data = json.loads(request.body)
-        is_following = data.get("is_liked")
-        post_id = data.get("post_id")
-
-        liker = request.user
-        post = Post.objects.get(pk=post_id)
-
-        if is_following:
-            try:
-                post.likes.remove(liker)
-            except IntegrityError:
-                return JsonResponse({
-                    "error": "Delete like unsuccessful, check if right data."
-                }, status=400)
+            "success": "Delete like successful"
+        }, status=200)
+    elif request.method == "PUT":
+        try:
+            post.likes.add(liker)
+        except IntegrityError:
             return JsonResponse({
-                "success": "Delete like successful"
-            }, status=200)
-        else:
-            try:
-                post.likes.add(liker)
-            except IntegrityError:
-                return JsonResponse({
-                    "error": "Save like unsuccessful, check if right data."
-                }, status=400)
-            return JsonResponse({
-                "success": "Save like successful"
-            }, status=201)
+                "error": "Save like unsuccessful, check if right data."
+            }, status=400)
+        return JsonResponse({
+            "success": "Save like successful"
+        }, status=201)
