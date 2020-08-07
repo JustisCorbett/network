@@ -103,15 +103,35 @@ def follow(request):
     if request.method != "PUT":
         return JsonResponse({
             "error": "PUT request required."
-        }, status=400)
+        }, status=405)
     else:
         data = json.loads(request.body)
-        
+        is_following = data.get("is_following")
         target = data.get("target")
         follower = request.user
-        
-        follow = Following(
-            target=target,
-            follower=follower
-        )
+        if is_following:
+            try:
+                follow = Following.objects.get(target=target, follower=follower).delete()
+            except IntegrityError:
+                return JsonResponse({
+                    "error": "Delete unsuccessful, check if right data."
+                }, status=400)
+            return JsonResponse({
+                "success": "Delete successful"
+            }, status=200)
+        else:
+            follow = Following(
+                target=target,
+                follower=follower
+            )
+            try:
+                follow.save()
+            except IntegrityError:
+                return JsonResponse({
+                    "error": "Save unsuccessful, check if right data."
+                }, status=400)
+            return JsonResponse({
+                "success": "Save successful"
+            }, status=201)
+
 

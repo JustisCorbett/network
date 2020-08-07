@@ -15,7 +15,7 @@ class Post(models.Model):
     text = models.TextField(max_length=255)
     likes = models.ManyToManyField(
         User,
-        related_name='likers',
+        related_name='liker',
     )
 
 
