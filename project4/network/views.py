@@ -100,41 +100,40 @@ def create_post(request):
 @login_required
 def follow(request):
     
-    if request.method != "PUT":
+    data = json.loads(request.body)
+    # get json data and determine if we add or remove m2m relation
+    is_following = data.get("is_following")
+    target = data.get("target")
+    follower = request.user
+
+    if request.method == "DELETE":
+        try:
+            follow = Following.objects.get(target=target, follower=follower).delete()
+        except IntegrityError:
+            return JsonResponse({
+                "error": "Delete following unsuccessful, check if right data."
+            }, status=400)
         return JsonResponse({
-            "error": "PUT request required."
-        }, status=405)
+            "success": "Delete following successful"
+        }, status=200)
+    elif request.method == "PUT":
+        follow = Following(
+            target=target,
+            follower=follower
+        )
+        try:
+            follow.save()
+        except IntegrityError:
+            return JsonResponse({
+                "error": "Save following unsuccessful, check if right data."
+            }, status=400)
+        return JsonResponse({
+            "success": "Save following successful"
+        }, status=201)
     else:
-        
-        data = json.loads(request.body)
-        # get json data to determine if we add or remove m2m relation
-        is_following = data.get("is_following")
-        target = data.get("target")
-        follower = request.user
-        if is_following:
-            try:
-                follow = Following.objects.get(target=target, follower=follower).delete()
-            except IntegrityError:
-                return JsonResponse({
-                    "error": "Delete following unsuccessful, check if right data."
-                }, status=400)
-            return JsonResponse({
-                "success": "Delete following successful"
-            }, status=200)
-        else:
-            follow = Following(
-                target=target,
-                follower=follower
-            )
-            try:
-                follow.save()
-            except IntegrityError:
-                return JsonResponse({
-                    "error": "Save following unsuccessful, check if right data."
-                }, status=400)
-            return JsonResponse({
-                "success": "Save following successful"
-            }, status=201)
+        return JsonResponse({
+            "error": "Must use PUT or DELETE"
+        }, status=400)
 
 
 @login_required
@@ -166,3 +165,7 @@ def like(request):
         return JsonResponse({
             "success": "Save like successful"
         }, status=201)
+    else:
+        return JsonResponse({
+            "error": "Must use PUT or DELETE"
+        }, status=400)
