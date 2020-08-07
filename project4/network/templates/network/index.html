@@ -3,7 +3,10 @@
 {% block body %}
     TODO
     {% for post in page_obj %}
+        <div class="post" id="{{ post.id }}">
+            <h5>{{ post.user }} </h5>
         {{ post.user }}
+        </div>
     {% endfor %}
     <div class="pagination">
         <span class="step-links">
