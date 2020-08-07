@@ -105,7 +105,9 @@ def follow(request):
             "error": "PUT request required."
         }, status=405)
     else:
+        
         data = json.loads(request.body)
+        # get json data to determine if we add or remove m2m relation
         is_following = data.get("is_following")
         target = data.get("target")
         follower = request.user
@@ -114,10 +116,10 @@ def follow(request):
                 follow = Following.objects.get(target=target, follower=follower).delete()
             except IntegrityError:
                 return JsonResponse({
-                    "error": "Delete unsuccessful, check if right data."
+                    "error": "Delete following unsuccessful, check if right data."
                 }, status=400)
             return JsonResponse({
-                "success": "Delete successful"
+                "success": "Delete following successful"
             }, status=200)
         else:
             follow = Following(
@@ -128,10 +130,46 @@ def follow(request):
                 follow.save()
             except IntegrityError:
                 return JsonResponse({
-                    "error": "Save unsuccessful, check if right data."
+                    "error": "Save following unsuccessful, check if right data."
                 }, status=400)
             return JsonResponse({
-                "success": "Save successful"
+                "success": "Save following successful"
             }, status=201)
 
 
+@login_required
+def like(request):
+    
+    if request.method != "PUT":
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=405)
+    else:
+        # get json data to query db for post objects, and determine if we add or remove m2m relation
+        data = json.loads(request.body)
+        is_following = data.get("is_liked")
+        post_id = data.get("post_id")
+
+        liker = request.user
+        post = Post.objects.get(pk=post_id)
+
+        if is_following:
+            try:
+                post.likes.remove(liker)
+            except IntegrityError:
+                return JsonResponse({
+                    "error": "Delete like unsuccessful, check if right data."
+                }, status=400)
+            return JsonResponse({
+                "success": "Delete like successful"
+            }, status=200)
+        else:
+            try:
+                post.likes.add(liker)
+            except IntegrityError:
+                return JsonResponse({
+                    "error": "Save like unsuccessful, check if right data."
+                }, status=400)
+            return JsonResponse({
+                "success": "Save like successful"
+            }, status=201)
