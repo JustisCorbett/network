@@ -16,11 +16,12 @@ class Post(models.Model):
     likes = models.ManyToManyField(
         User,
         related_name='liker',
+        blank=True
     )
 
     @property
     def num_likes(self):
-        return self.likes.all().count()
+        return self.likes.count()
 
 
 class Following(models.Model):
