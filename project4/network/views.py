@@ -17,7 +17,9 @@ def index(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request, "network/index.html", {"page_obj": page_obj})
+    return render(request, "network/index.html", {
+        "page_obj": page_obj
+        })
 
 
 def login_view(request):
@@ -93,8 +95,6 @@ def create_post(request):
                 })
 
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/create_post.html")
 
 
 @login_required
