@@ -80,19 +80,20 @@ def create_post(request):
     if request.method == "POST":
         # Gather data and save post, return error if save fails
         text = request.POST["text"]
+        text_length = text.len()
         user = request.user
 
+        # For some reason django doesnt evalidate max_length on textfields so I built it here
+        if text_length > 280 or text_length < 5:
+            return render(request, "network/index.html", {
+                "message": "Post must be more than 5 characters and less than 280"
+            })
         post = Post(
             user=user,
             text=text
         )
 
-        try:
-            post.save()
-        except IntegrityError:
-            return render(request, "network/create_post.html", {
-                "message": "Post exceeds max amount of characters!"
-                })
+        post.save()
 
         return HttpResponseRedirect(reverse("index"))
 

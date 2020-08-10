@@ -1,40 +1,43 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {% if user.is_authenticated() %}
-        <div class="form-container">
-            <form id="compose-form" action="/create_post">
-                <div class="form-group" >
-                    <input class="form-control" type="text" name="text" maxlength="255" value="New Post">
-                </div>
-                <input type="submit" class="btn btn-primary"/>
-            </form>
-        </div>
-    {% endif %}
-    <div class="post-container">
-    {% for post in page_obj %}
-        <div class="post" id="{{ post.id }}">
-            <h6>{{ post.user }} posted at {{ post.date}}</h6>
-            <p>{{ post.text }}</p>
+    <div class="body-container">
+        {% if user.is_authenticated %}
+            <div class="form-container">
+                <form id="compose-form" action="/create_post" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group" >
+                        <textarea class="form-control" name="text" placeholder="New Post" maxlength="280"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-success"/>
+                </form>
+            </div>
+        {% endif %}
+        <div class="post-container">
+        {% for post in page_obj %}
+            <div class="post" id="{{ post.id }}">
+                <h6>{{ post.user }} posted at {{ post.date}}</h6>
+                <p>{{ post.text }}</p>
+                
+            </div>
+        {% endfor %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
             
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
         </div>
-    {% endfor %}
-    </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
-    
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-    
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
     </div>
 {% endblock %}
