@@ -80,7 +80,7 @@ def create_post(request):
     if request.method == "POST":
         # Gather data and save post, return error if save fails
         text = request.POST["text"]
-        text_length = text.len()
+        text_length = len(text)
         user = request.user
 
         # For some reason django doesnt evalidate max_length on textfields so I built it here
