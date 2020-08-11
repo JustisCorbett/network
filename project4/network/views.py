@@ -11,14 +11,15 @@ from django.core.paginator import Paginator
 from .models import User, Post, Following
 
 
-def index(request):
+def index(request, message=None):
     posts = Post.objects.order_by("-date").all().annotate(num_posts=Count("likes"))
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "message": message
         })
 
 
@@ -82,12 +83,13 @@ def create_post(request):
         text = request.POST["text"]
         text_length = len(text)
         user = request.user
+        print(text_length)
 
         # For some reason django doesnt evalidate max_length on textfields so I built it here
-        if text_length > 280 or text_length < 5:
-            return render(request, "network/index.html", {
-                "message": "Post must be more than 5 characters and less than 280"
-            })
+        if ( text_length > 500 ) or ( text_length < 5 ):
+            message = "Post must be more than 5 characters and less than 500"
+            return HttpResponseRedirect(reverse("index_message", kwargs={"message": message}))
+
         post = Post(
             user=user,
             text=text
