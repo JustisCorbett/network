@@ -2,22 +2,11 @@
 
 {% block body %}
     <div class="body-container">
-        {% if user.is_authenticated %}
-            <div class="form-container">
-                {% if message %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ message }}
-                    </div>
-                {% endif %}
-                <form id="compose-form" action="/create_post" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group" >
-                        <textarea class="form-control" name="text" placeholder="New Post" maxlength="500"></textarea>
-                    </div>
-                    <input type="submit" class="btn btn-success"/>
-                </form>
-            </div>
-        {% endif %}
+        <div class="profile-container">
+            {% if user.is_authenticated %}
+                
+            {% endif %}
+        </div>
         <div class="post-container">
         {% for post in page_obj %}
             <div class="post" id="{{ post.id }}">

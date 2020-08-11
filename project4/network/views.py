@@ -75,6 +75,19 @@ def register(request):
         return render(request, "network/register.html")
 
 
+def profile(request, username):
+    user = User.objects.get(username=username)
+    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_posts=Count("likes"))
+
+    paginator = Paginator(posts, 10) # Show 10 posts per page.
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/profile.html", {
+        "user": user,
+        "page_obj": page_obj,
+    })
+
+
 @login_required
 def create_post(request):
 
