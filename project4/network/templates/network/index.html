@@ -28,7 +28,7 @@
                     <p>{{ post.text }}</p>
                     <span>Likes: {{ post.num_likes }}</span>
                 </div>
-                {% if user.username != post.username %}
+                {% if user != post.user %}
                     <div class="post-like">
                         {% if user in post.likes %}
                             <button type="button" onclick="likePost(this)" data-like="true" data-post="{{ post.id }}" class="btn btn-secondary btn-sm">Unlike</button>
