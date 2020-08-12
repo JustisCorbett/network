@@ -97,13 +97,13 @@ def profile(request, username):
 def create_post(request):
 
     if request.method == "POST":
-        # Gather data and save post, return error if save fails
+        # Gather data and save post, return error if save fails.
         text = request.POST["text"]
         text_length = len(text)
         user = request.user
         print(text_length)
 
-        # For some reason django doesnt evalidate max_length on textfields so I built it here
+        # For some reason django doesnt validate max_length on textfields so I built it here.
         if ( text_length > 500 ) or ( text_length < 5 ):
             message = "Post must be more than 5 characters and less than 500!"
             return HttpResponseRedirect(reverse("index_message", kwargs={"message": message}))
@@ -119,7 +119,7 @@ def create_post(request):
 
 
 @login_required
-def follow(request):
+def follow_user(request):
     
     data = json.loads(request.body)
     # get json data and determine if we add or remove m2m relation
@@ -158,7 +158,7 @@ def follow(request):
 
 
 @login_required
-def like(request):
+def like_post(request):
     
     # get json data to query db for post objects, and determine if we add or remove m2m relation
     data = json.loads(request.body)
