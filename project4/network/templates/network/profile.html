@@ -3,8 +3,15 @@
 {% block body %}
     <div class="body-container">
         <div class="profile-container">
-            {% if user.is_authenticated %}
-                
+            <h2>{{ profile_user.username }}</h2>
+            <div class="follow-container">
+                <span>Following: {{ profile_user.num_targets }}</span>
+                <span>Followers: {{ profile_user.num_followers }}</span>
+            </div>
+            {% if user in followers %}
+                <button type="button" data-following="true" class="btn btn-secondary btn-sm">Unfollow</button>
+            {% else %}
+                <button type="button" data-following="false" class="btn btn-success btn-sm">Follow</button>
             {% endif %}
         </div>
         <div class="post-container">

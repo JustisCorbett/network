@@ -41,6 +41,14 @@ p {
     align-items: stretch;
 }
 
+.profile-container {
+    background-color: #357DED;
+    display: flex;
+    flex-direction: column;
+justify-content: space-evenly;
+    align-items: center;
+}
+
 .post {
     background-color: #FCF7F8;
     border: 2px solid #CED3DC;
