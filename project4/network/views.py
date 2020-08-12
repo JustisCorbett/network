@@ -105,7 +105,7 @@ def create_post(request):
 
         # For some reason django doesnt evalidate max_length on textfields so I built it here
         if ( text_length > 500 ) or ( text_length < 5 ):
-            message = "Post must be more than 5 characters and less than 500"
+            message = "Post must be more than 5 characters and less than 500!"
             return HttpResponseRedirect(reverse("index_message", kwargs={"message": message}))
 
         post = Post(
@@ -132,10 +132,10 @@ def follow(request):
             follow.delete()
         except IntegrityError:
             return JsonResponse({
-                "error": "Delete following unsuccessful, check if right data."
+                "error": "Delete following unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Delete following successful"
+            "success": "Delete following successful!"
         }, status=200)
     elif request.method == "PUT":
         follow = Following(
@@ -146,14 +146,14 @@ def follow(request):
             follow.save()
         except IntegrityError:
             return JsonResponse({
-                "error": "Save following unsuccessful, check if right data."
+                "error": "Save following unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Save following successful"
+            "success": "Save following successful!"
         }, status=201)
     else:
         return JsonResponse({
-            "error": "Must use PUT or DELETE"
+            "error": "Must use PUT or DELETE."
         }, status=400)
 
 
@@ -171,24 +171,24 @@ def like(request):
             post.likes.remove(liker)
         except IntegrityError:
             return JsonResponse({
-                "error": "Delete like unsuccessful, check if right data."
+                "error": "Delete like unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Delete like successful"
+            "success": "Delete like successful!"
         }, status=200)
     elif request.method == "PUT":
         try:
             post.likes.add(liker)
         except IntegrityError:
             return JsonResponse({
-                "error": "Save like unsuccessful, check if right data."
+                "error": "Save like unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Save like successful"
+            "success": "Save like successful!"
         }, status=201)
     else:
         return JsonResponse({
-            "error": "Must use PUT or DELETE"
+            "error": "Must use PUT or DELETE."
         }, status=400)
 
 
@@ -197,7 +197,7 @@ def edit_post(request):
 
     if request.method != "PUT":
         return JsonResponse({
-            "error": "Must use PUT to edit post"
+            "error": "Must use PUT to edit post."
         }, status=400)
     else:
         data = json.loads(request.body)
