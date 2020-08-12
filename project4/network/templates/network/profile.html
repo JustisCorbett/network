@@ -9,17 +9,26 @@
                 <span>Followers: {{ profile_user.num_followers }}</span>
             </div>
             {% if user in followers %}
-                <button type="button" data-following="true" class="btn btn-secondary btn-sm">Unfollow</button>
+                <button type="button" onclick="follow(this)" data-following="true" class="btn btn-secondary btn-sm">Unfollow</button>
             {% else %}
-                <button type="button" data-following="false" class="btn btn-success btn-sm">Follow</button>
+                <button type="button" onclick="follow(this)" data-following="false" class="btn btn-success btn-sm">Follow</button>
             {% endif %}
         </div>
-        <div class="post-container">
+        <div class="posts-container">
         {% for post in page_obj %}
-            <div class="post" id="{{ post.id }}">
-                <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
-                <p>{{ post.text }}</p>
-                <
+            <div class="post-container">
+                <div class="post-body">
+                    <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
+                    <p>{{ post.text }}</p>
+                    <span>Likes: {{ post.num_likes }}</span>
+                </div>
+                <div class="post-like">
+                    {% if user in post.likes %}
+                        <button type="button" onclick="like(this)" data-like="true" class="btn btn-secondary btn-sm">Unlike</button>
+                    {% else %}
+                        <button type="button" onclick="like(this)" data-like="false" class="btn btn-success btn-sm">Like</button>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
             <nav class="paginator" aria-label="...">

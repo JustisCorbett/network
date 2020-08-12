@@ -12,7 +12,7 @@ from .models import User, Post, Following
 
 
 def index(request, message=None):
-    posts = Post.objects.order_by("-date").all().annotate(num_posts=Count("likes"))
+    posts = Post.objects.order_by("-date").all().annotate(num_likes=Count("likes"))
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
     page_number = request.GET.get("page")
@@ -81,7 +81,7 @@ def profile(request, username):
         num_followers=Count("followers")
         ).first()
     followers = user.followers.all()
-    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_posts=Count("likes"))
+    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_likes=Count("likes"))
 
     paginator = Paginator(posts, 10) # Show 10 posts per page.
     page_number = request.GET.get("page")

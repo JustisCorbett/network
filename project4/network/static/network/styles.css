@@ -33,7 +33,7 @@ p {
 
 }
 
-.post-container {
+.posts-container {
     background-color: #08295E;
     display: flex;
     flex-direction: column;
@@ -45,11 +45,11 @@ p {
     background-color: #357DED;
     display: flex;
     flex-direction: column;
-justify-content: space-evenly;
+    justify-content: space-evenly;
     align-items: center;
 }
 
-.post {
+.post-container {
     background-color: #FCF7F8;
     border: 2px solid #CED3DC;
     border-radius: 15px;
