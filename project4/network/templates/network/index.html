@@ -28,13 +28,19 @@
                     <p>{{ post.text }}</p>
                     <span>Likes: {{ post.num_likes }}</span>
                 </div>
-                <div class="post-like">
-                    {% if user in post.likes %}
-                        <button type="button" onclick="like(this)" data-like="true" class="btn btn-secondary btn-sm">Unlike</button>
-                    {% else %}
-                        <button type="button" onclick="like(this)" data-like="false" class="btn btn-success btn-sm">Like</button>
-                    {% endif %}
-                </div>
+                {% if user.username != post.username %}
+                    <div class="post-like">
+                        {% if user in post.likes %}
+                            <button type="button" onclick="likePost(this)" data-like="true" data-post="{{ post.id }}" class="btn btn-secondary btn-sm">Unlike</button>
+                        {% else %}
+                            <button type="button" onclick="likePost(this)" data-like="false" data-post="{{ post.id }}" class="btn btn-success btn-sm">Like</button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div>
+                        <button type="button" onclick="editPost(this)" data-post="{{ post.id }}" class="btn btn-success btn-sm">Edit Post</button>
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
             <nav class="paginator" aria-label="...">
