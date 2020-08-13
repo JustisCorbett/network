@@ -30,7 +30,7 @@
                 </div>
                 {% if user != post.user %}
                     <div class="post-like">
-                        {% if post.user_likes != 0 %}
+                        {% if user in post.likes.all %}
                             <button type="button" onclick="likePost(this)" data-like="true" data-post="{{ post.id }}" class="btn btn-secondary btn-sm">Unlike</button>
                         {% else %}
                             <button type="button" onclick="likePost(this)" data-like="false" data-post="{{ post.id }}" class="btn btn-success btn-sm">Like</button>

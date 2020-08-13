@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.core.paginator import Paginator
 
 from .models import User, Post, Following
@@ -13,8 +13,7 @@ from .models import User, Post, Following
 
 def index(request, message=None):
     posts = Post.objects.order_by("-date").all().annotate(
-        num_likes=Count("likes"),
-        user_likes=Count("likes", filter=Q(likes=user.id))
+        num_likes=Count("likes")
     )
     paginator = Paginator(posts, 10) # Show 10 posts per page.
 
@@ -84,8 +83,7 @@ def profile(request, username):
         num_followers=Count("followers")
         ).first()
     posts = Post.objects.order_by("-date").filter(user=profile_user).annotate(
-        num_likes=Count("likes"),
-        user_likes=Count("likes", filter=Q(likes=user.id))
+        num_likes=Count("likes")
     )
     user = request.user
     # Check if current user is following profiled user
@@ -112,8 +110,7 @@ def follows(request):
     # Query for users following targets for filtering posts
     follows = Following.objects.filter(follower_id=user.id).values("target_id")
     posts = Post.objects.order_by("-date").filter(user__in=follows).annotate(
-        num_likes=Count("likes"),
-        user_likes=Count("likes", filter=Q(likes=user.id))
+        num_likes=Count("likes")
     )
     print(posts.values())
     paginator = Paginator(posts, 10) # Show 10 posts per page.
