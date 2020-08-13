@@ -112,7 +112,6 @@ def follows(request):
     posts = Post.objects.order_by("-date").filter(user__in=follows).annotate(
         num_likes=Count("likes")
     )
-    print(posts.values())
     paginator = Paginator(posts, 10) # Show 10 posts per page.
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -128,7 +127,6 @@ def create_post(request):
         text = request.POST["text"]
         text_length = len(text)
         user = request.user
-        print(text_length)
 
         # For some reason django doesnt validate max_length on textfields so I built it here.
         if ( text_length > 500 ) or ( text_length < 5 ):
