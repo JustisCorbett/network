@@ -103,9 +103,9 @@ def profile(request, username):
 @login_required
 def follows(request):
     user = request.user
-    #targets = user.targets.all()
-    #posts = Post.objects.order_by("-date").filter(user=targets).annotate(num_likes=Count("likes"))
-    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_likes=Count("likes"))
+    # Query for users following targets for filtering posts
+    follows = Following.objects.filter(follower_id=user.id).values("target_id")
+    posts = Post.objects.order_by("-date").filter(user__in=follows).annotate(num_likes=Count("likes"))
 
     paginator = Paginator(posts, 10) # Show 10 posts per page.
     page_number = request.GET.get("page")
