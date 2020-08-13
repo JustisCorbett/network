@@ -76,26 +76,47 @@ def register(request):
 
 
 def profile(request, username):
-    user = User.objects.filter(username=username).annotate(
+    profile_user = User.objects.filter(username=username).annotate(
         num_targets=Count("targets"),
         num_followers=Count("followers")
         ).first()
-    followers = user.followers.all()
-    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_likes=Count("likes"))
+    posts = Post.objects.order_by("-date").filter(user=profile_user).annotate(num_likes=Count("likes"))
+    user = request.user
+    # Check if current user is following profiled user
+    follow = profile_user.followers.filter(follower_id=user.id)
+
+    if follow:
+        is_following = True
+    else:
+        is_following = False
 
     paginator = Paginator(posts, 10) # Show 10 posts per page.
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     return render(request, "network/profile.html", {
-        "profile_user": user,
-        "followers": followers,
+        "profile_user": profile_user,
+        "is_following": is_following,
+        "page_obj": page_obj,
+    })
+
+
+@login_required
+def follows(request):
+    user = request.user
+    #targets = user.targets.all()
+    #posts = Post.objects.order_by("-date").filter(user=targets).annotate(num_likes=Count("likes"))
+    posts = Post.objects.order_by("-date").filter(user=user).annotate(num_likes=Count("likes"))
+
+    paginator = Paginator(posts, 10) # Show 10 posts per page.
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/follows.html", {
         "page_obj": page_obj,
     })
 
 
 @login_required
 def create_post(request):
-
     if request.method == "POST":
         # Gather data and save post, return error if save fails.
         text = request.POST["text"]
@@ -120,7 +141,6 @@ def create_post(request):
 
 @login_required
 def follow_user(request):
-    
     data = json.loads(request.body)
     # get json data and determine if we add or remove m2m relation
     target = data.get("target")
@@ -159,7 +179,6 @@ def follow_user(request):
 
 @login_required
 def like_post(request):
-    
     # get json data to query db for post objects, and determine if we add or remove m2m relation
     data = json.loads(request.body)
     post_id = data.get("post_id")
@@ -194,7 +213,6 @@ def like_post(request):
 
 @login_required
 def edit_post(request):
-
     if request.method != "PUT":
         return JsonResponse({
             "error": "Must use PUT to edit post."
