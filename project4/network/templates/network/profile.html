@@ -20,24 +20,19 @@
         </div>
         <div class="posts-container">
         {% for post in page_obj %}
-            <div class="post-container">
-                <div class="post-body">
-                    <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
-                    <p>{{ post.text }}</p>
-                    <span>Likes: {{ post.num_likes }}</span>
-                </div>
-                {% if user.username != profile_user.username %}
-                    <div class="post-like">
-                        {% if user in post.likes.all %}
-                            <button type="button" onclick="likePost(this)" data-like="true" data-post="{{ post.id }}" class="btn btn-secondary btn-sm">Unlike</button>
-                        {% else %}
-                            <button type="button" onclick="likePost(this)" data-like="false" data-post="{{ post.id }}" class="btn btn-success btn-sm">Like</button>
-                        {% endif %}
-                    </div>
+            <div class="post-container" data-post="{{ post.id }}">
+                <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
+                <p>{{ post.text }}</p>
+                <span>Likes: </span>
+                <span class="num-likes">{{ post.num_likes }}</span>
+                {% if user != post.user %}
+                    {% if user in post.likes.all %}
+                        <button type="button" onclick="likePost(this)" data-liked="true" class="btn btn-secondary btn-sm">Unlike</button>
+                    {% else %}
+                        <button type="button" onclick="likePost(this)" data-liked="false" class="btn btn-success btn-sm">Like</button>
+                    {% endif %}
                 {% else %}
-                    <div>
-                        <button type="button" onclick="editPost(this)" data-post="{{ post.id }}" class="btn btn-success btn-sm">Edit Post</button>
-                    </div>
+                    <button type="button" onclick="editPost(this)" class="btn btn-success btn-sm">Edit Post</button>
                 {% endif %}
             </div>
         {% endfor %}
