@@ -27,11 +27,9 @@ function likePost(button) {
             })
         }).then(response => {
             button.removeAttribute('disabled');
-            if(response.ok) {
-                
-            } else {
             return response.json();
-            }
+        }).then(message => {
+            console.log(message)
         })
     } 
     else {
@@ -54,13 +52,20 @@ function likePost(button) {
             })
         }).then(response => {
             button.removeAttribute('disabled');
-            if(response.ok) {
-                
-            } else {
             return response.json();
-            }
+        }).then(message => {
+            console.log(message)
         })
     }
+}
+
+
+function editPost(button) {
+    const post = button.parentNode;
+    const postId = post.getAttribute('data-post');
+
+    button.classList.add('hidden');
+
 }
 
 

@@ -10,19 +10,29 @@
         <div class="posts-container">
         {% for post in page_obj %}
             <div class="post-container" data-post="{{ post.id }}">
-                <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
-                <p>{{ post.text }}</p>
-                <span>Likes: </span>
-                <span class="num-likes">{{ post.num_likes }}</span>
-                {% if user != post.user %}
-                    {% if user in post.likes.all %}
-                        <button type="button" onclick="likePost(this)" data-liked="true" class="btn btn-secondary btn-sm">Unlike</button>
+                <div class="post" data-post="{{ post.id }}"></div>
+                    <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
+                    <p>{{ post.text }}</p>
+                    <span>Likes: </span>
+                    <span class="num-likes">{{ post.num_likes }}</span>
+                    {% if user != post.user %}
+                        {% if user in post.likes.all %}
+                            <button type="button" onclick="likePost(this)" data-liked="true" class="btn btn-secondary btn-sm">Unlike</button>
+                        {% else %}
+                            <button type="button" onclick="likePost(this)" data-liked="false" class="btn btn-success btn-sm">Like</button>
+                        {% endif %}
                     {% else %}
-                        <button type="button" onclick="likePost(this)" data-liked="false" class="btn btn-success btn-sm">Like</button>
+                        <button type="button" onclick="editPost(this)" class="btn btn-success btn-sm">Edit Post</button>
                     {% endif %}
-                {% else %}
-                    <button type="button" onclick="editPost(this)" class="btn btn-success btn-sm">Edit Post</button>
-                {% endif %}
+                </div>
+                <div class="post-edit hidden">
+                    <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
+                    <div class="form-group" >
+                        <textarea rows="5" class="form-control edit-form" name="text" placeholder="New Post" maxlength="500"></textarea>
+                    </div>
+                    <button type="button" onclick="saveEditPost(this)" class="btn btn-success btn-sm">Save Edit</button>
+                    <button type="button" onclick="editPost(this)" class="btn btn-secondary btn-sm">Cancel</button>
+                </div>
             </div>
         {% endfor %}
             <nav class="paginator" aria-label="...">

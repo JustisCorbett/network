@@ -14,6 +14,10 @@ p {
     word-wrap:break-word;
 }
 
+.hidden {
+    display: none;
+}
+
 .body-container {
     background-color: #08295E;
     display: flex;
