@@ -228,15 +228,17 @@ def edit_post(request):
         user = request.user
         # make sure the user editing the post is the creator
         post = get_object_or_404(Post, pk=post_id, user=user)
-
+        if not post:
+            return JsonResponse({
+                "error": "Only the user who made the post can edit."
+            }, status=400)
         post.text = post_text
         try:
             post.save()
         except IntegrityError:
             return JsonResponse({
-                "error": "Post cant be updated!"
+                "error": "Post can't be updated!"
             }, status=400)
         return JsonResponse({
-            "success": "Post updated!",
-            "post": post
+            "success": "Post updated!"
         }, status=200)

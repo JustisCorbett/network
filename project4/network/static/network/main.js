@@ -15,6 +15,7 @@ function likePost(button) {
         button.setAttribute('data-liked', 'true');
         button.setAttribute('disabled', 'true');
         button.innerText = 'Unlike';
+
         fetch('like_post', {
             method: 'PUT',
             credentials: 'include',
@@ -40,6 +41,7 @@ function likePost(button) {
         button.setAttribute('data-liked', 'false');
         button.setAttribute('disabled', 'true');
         button.innerText = 'Like';
+
         fetch('like_post', {
             method: 'DELETE',
             credentials: 'include',
@@ -61,12 +63,58 @@ function likePost(button) {
 
 
 function editPost(button) {
-    const postDiv = button.parentNode;
-    const postId = postDiv.getAttribute('data-post');
-    const postText = postDiv.getElementsByClassName('post-text')[0].innerText
-    const editDiv = post.parentNode.getElementsByClassName('post-edit')[0]
-    postDiv.classList.add('hidden');
-    editDiv.classList.remove('hidden');
+    const btnVal = button.value;
+    const postCont = button.parentNode.parentNode;
+    const postDiv = postCont.getElementsByClassName('post')[0];
+    const editDiv = postCont.getElementsByClassName('post-edit')[0];
+    const postText = postDiv.getElementsByClassName('post-text')[0].innerText;
+    const editForm = editDiv.getElementsByClassName('edit-form')[0];
+
+    if (btnVal === 'open') {
+        postDiv.classList.add('hidden');
+        editDiv.classList.remove('hidden');
+        editForm.value = postText;
+    } else if (btnVal === 'close') {
+        postDiv.classList.remove('hidden');
+        editDiv.classList.add('hidden');
+    }
+}
+
+
+function saveEdit(button) {
+    const editDiv = button.parentNode;
+    const editForm = editDiv.getElementsByClassName('edit-form')[0];
+    const text = editForm.value;
+    const postDiv = editDiv.parentNode.getElementsByClassName('post')[0];
+    const postId = editDiv.parentNode.getAttribute('data-post')[0];
+    const postText = editDiv.parentNode.getElementsByClassName('post-text')[0];
+    const csrftoken = getCookie('csrftoken');
+    button.setAttribute('disabled', 'true');
+
+    fetch('edit_post', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: new Headers ({
+            "X-CSRFToken": csrftoken,
+            'content-type': 'application/json'
+        }),
+        body: JSON.stringify({
+            post_id: postId,
+            text: text
+        })
+    }).then(response => {
+        button.removeAttribute('disabled');
+        if (response.ok) {
+            postText.innerText = text;
+            postDiv.classList.remove('hidden');
+            editDiv.classList.add('hidden');
+        } else {
+            return response.json();
+        }
+    }).then(message => {
+        console.log(message);
+        alert(message["error"]);
+    })
 
 }
 

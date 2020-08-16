@@ -22,8 +22,8 @@
         {% endif %}
         <div class="posts-container">
         {% for post in page_obj %}
-            <div class="post-container" >
-                <div class="post" data-post="{{ post.id }}">
+            <div class="post-container" data-post="{{ post.id }}">
+                <div class="post">
                     <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
                     <p class="post-text">{{ post.text }}</p>
                     <span>Likes: </span>
@@ -43,7 +43,7 @@
                     <div class="form-group" >
                         <textarea rows="5" class="form-control edit-form" name="text" placeholder="New Post" maxlength="500"></textarea>
                     </div>
-                    <button type="button" onclick="saveEditPost(this)" class="btn btn-success btn-sm">Save Edit</button>
+                    <button type="button" onclick="saveEdit(this)" class="btn btn-success btn-sm">Save Edit</button>
                     <button type="button" onclick="editPost(this)" value="close" class="btn btn-secondary btn-sm">Cancel</button>
                 </div>
             </div>
