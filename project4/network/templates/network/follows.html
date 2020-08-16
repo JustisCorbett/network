@@ -12,7 +12,7 @@
             <div class="post-container" data-post="{{ post.id }}">
                 <div class="post" data-post="{{ post.id }}"></div>
                     <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
-                    <p>{{ post.text }}</p>
+                    <p class="post-text">{{ post.text }}</p>
                     <span>Likes: </span>
                     <span class="num-likes">{{ post.num_likes }}</span>
                     {% if user != post.user %}
@@ -22,7 +22,7 @@
                             <button type="button" onclick="likePost(this)" data-liked="false" class="btn btn-success btn-sm">Like</button>
                         {% endif %}
                     {% else %}
-                        <button type="button" onclick="editPost(this)" class="btn btn-success btn-sm">Edit Post</button>
+                        <button type="button" onclick="editPost(this)" value="open" class="btn btn-success btn-sm">Edit Post</button>
                     {% endif %}
                 </div>
                 <div class="post-edit hidden">
@@ -31,7 +31,7 @@
                         <textarea rows="5" class="form-control edit-form" name="text" placeholder="New Post" maxlength="500"></textarea>
                     </div>
                     <button type="button" onclick="saveEditPost(this)" class="btn btn-success btn-sm">Save Edit</button>
-                    <button type="button" onclick="editPost(this)" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button type="button" onclick="editPost(this)" value="close" class="btn btn-secondary btn-sm">Cancel</button>
                 </div>
             </div>
         {% endfor %}

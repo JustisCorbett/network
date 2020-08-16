@@ -61,10 +61,12 @@ function likePost(button) {
 
 
 function editPost(button) {
-    const post = button.parentNode;
-    const postId = post.getAttribute('data-post');
-
-    button.classList.add('hidden');
+    const postDiv = button.parentNode;
+    const postId = postDiv.getAttribute('data-post');
+    const postText = postDiv.getElementsByClassName('post-text')[0].innerText
+    const editDiv = post.parentNode.getElementsByClassName('post-edit')[0]
+    postDiv.classList.add('hidden');
+    editDiv.classList.remove('hidden');
 
 }
 
