@@ -156,10 +156,10 @@ def follow_user(request):
             follow.delete()
         except IntegrityError:
             return JsonResponse({
-                "error": "Delete following unsuccessful, check if right data!"
+                "message": "Error: Delete following unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Delete following successful!"
+            "message": "Error: Delete following successful!"
         }, status=200)
     elif request.method == "PUT":
         follow = Following(
@@ -170,14 +170,14 @@ def follow_user(request):
             follow.save()
         except IntegrityError:
             return JsonResponse({
-                "error": "Save following unsuccessful, check if right data!"
+                "message": "Error: Save following unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Save following successful!"
+            "message": "Success: Save following successful!"
         }, status=201)
     else:
         return JsonResponse({
-            "error": "Must use PUT or DELETE."
+            "message": "Error: Must use PUT or DELETE."
         }, status=400)
 
 
@@ -194,24 +194,24 @@ def like_post(request):
             post.likes.remove(liker)
         except IntegrityError:
             return JsonResponse({
-                "error": "Delete like unsuccessful, check if right data!"
+                "message": "Error: Delete like unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Delete like successful!"
+            "message": "Success: Delete like successful!"
         }, status=200)
     elif request.method == "PUT":
         try:
             post.likes.add(liker)
         except IntegrityError:
             return JsonResponse({
-                "error": "Save like unsuccessful, check if right data!"
+                "message": "Error: Save like unsuccessful, check if right data!"
             }, status=400)
         return JsonResponse({
-            "success": "Save like successful!"
+            "message": "Success: Save like successful!"
         }, status=201)
     else:
         return JsonResponse({
-            "error": "Must use PUT or DELETE."
+            "message": "Error: Must use PUT or DELETE."
         }, status=400)
 
 
@@ -219,7 +219,7 @@ def like_post(request):
 def edit_post(request):
     if request.method != "PUT":
         return JsonResponse({
-            "error": "Must use PUT to edit post."
+            "message": "Error: Must use PUT to edit post."
         }, status=400)
     else:
         data = json.loads(request.body)
@@ -230,15 +230,15 @@ def edit_post(request):
         post = get_object_or_404(Post, pk=post_id, user=user)
         if not post:
             return JsonResponse({
-                "error": "Only the user who made the post can edit."
+                "message": "Error: Only the user who made the post can edit."
             }, status=400)
         post.text = post_text
         try:
             post.save()
         except IntegrityError:
             return JsonResponse({
-                "error": "Post can't be updated!"
+                "message": "Error: Post can't be updated!"
             }, status=400)
         return JsonResponse({
-            "success": "Post updated!"
+            "message": "Success: Post updated!"
         }, status=200)
