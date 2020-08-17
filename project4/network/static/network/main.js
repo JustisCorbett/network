@@ -108,12 +108,13 @@ function saveEdit(button) {
             postText.innerText = text;
             postDiv.classList.remove('hidden');
             editDiv.classList.add('hidden');
+            return response.json();
         } else {
             return response.json();
         }
     }).then(message => {
         console.log(message);
-        alert(message["error"]);
+        alert(message["message"]);
     })
 
 }
