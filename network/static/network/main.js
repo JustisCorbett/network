@@ -1,6 +1,6 @@
 function likePost(button) {
     const post = button.parentNode;
-    const postId = post.getAttribute('data-post');
+    const postId = post.parentNode.getAttribute('data-post');
     const isLiked = button.getAttribute('data-liked');
     const csrftoken = getCookie('csrftoken');
     const likeNumEl = post.getElementsByClassName('num-likes')[0];
@@ -86,7 +86,7 @@ function saveEdit(button) {
     const editForm = editDiv.getElementsByClassName('edit-form')[0];
     const text = editForm.value;
     const postDiv = editDiv.parentNode.getElementsByClassName('post')[0];
-    const postId = editDiv.parentNode.getAttribute('data-post')[0];
+    const postId = editDiv.parentNode.getAttribute('data-post');
     const postText = editDiv.parentNode.getElementsByClassName('post-text')[0];
     const csrftoken = getCookie('csrftoken');
     button.setAttribute('disabled', 'true');
