@@ -147,7 +147,8 @@ def create_post(request):
 def follow_user(request):
     data = json.loads(request.body)
     # get json data and determine if we add or remove m2m relation
-    target = data.get("target")
+    target_username = data.get("target")
+    target = get_object_or_404(User, username=target_username)
     follower = request.user
 
     if request.method == "DELETE":

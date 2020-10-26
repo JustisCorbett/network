@@ -116,7 +116,65 @@ function saveEdit(button) {
         console.log(message);
         alert(message["message"]);
     })
+}
 
+function followUser(button) {
+    let targetUser = button.getAttribute('data-user');
+    let isFollowing = button.getAttribute('data-following');
+    let baseURL = window.location.origin;
+    const csrftoken = getCookie('csrftoken');
+    button.setAttribute('disabled', 'true');
+    if (isFollowing) {
+        fetch( (baseURL + '/follow_user'), {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: new Headers ({
+                "X-CSRFToken": csrftoken,
+                'content-type': 'application/json'
+            }),
+            body: JSON.stringify({
+                target: targetUser
+            })
+        }).then(response => {
+            button.removeAttribute('disabled');
+            if (response.ok) {
+                button.innerText = 'Follow';
+                postDiv.classList.remove('btn-secondary');
+                editDiv.classList.add('btn-primary');
+                return response.json();
+            } else {
+                return response.json();
+            }
+        }).then(message => {
+            console.log(message);
+            alert(message["message"]);
+        })
+    } else {
+        fetch((baseURL + '/follow_user'), {
+            method: 'PUT',
+            credentials: 'include',
+            headers: new Headers ({
+                "X-CSRFToken": csrftoken,
+                'content-type': 'application/json'
+            }),
+            body: JSON.stringify({
+                target: targetUser
+            })
+        }).then(response => {
+            button.removeAttribute('disabled');
+            if (response.ok) {
+                button.innerText = 'Unfollow';
+                postDiv.classList.remove('btn-primary');
+                editDiv.classList.add('btn-secondary');
+                return response.json();
+            } else {
+                return response.json();
+            }
+        }).then(message => {
+            console.log(message);
+            alert(message["message"]);
+        })
+    }
 }
 
 
