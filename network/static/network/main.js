@@ -149,7 +149,6 @@ function followUser(button) {
             }
         }).then(message => {
             console.log(message);
-            alert(message["message"]);
         })
     } else {
         fetch((baseURL + '/follow_user'), {
@@ -175,7 +174,6 @@ function followUser(button) {
             }
         }).then(message => {
             console.log(message);
-            alert(message["message"]);
         })
     }
 }
