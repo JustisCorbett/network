@@ -7,8 +7,8 @@
         <div class="profile-container">
             <h2>{{ profile_user.username }}</h2>
             <div class="follow-container">
-                <span>Following: {{ profile_user.num_targets }}</span>
-                <span>Followers: {{ profile_user.num_followers }}</span>
+                <span >Following: {{ profile_user.num_targets }}</span>
+                <span id="followers-num">Followers: {{ profile_user.num_followers }}</span>
             </div>
             {% if user.username != profile_user.username %}
                 {% if is_following %}

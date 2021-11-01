@@ -122,6 +122,8 @@ function followUser(button) {
     let targetUser = button.getAttribute('data-user');
     let isFollowing = button.getAttribute('data-following');
     let baseURL = window.location.origin;
+    let followersNum = document.getElementById('followers-num');
+    )
     const csrftoken = getCookie('csrftoken');
     button.setAttribute('disabled', 'true');
     console.log(isFollowing);
@@ -143,6 +145,7 @@ function followUser(button) {
                 button.classList.remove('btn-secondary');
                 button.classList.add('btn-success');
                 button.setAttribute('data-following', 'false');
+                followersNum.innerText = parseInt(followersNum.innerText) - 1;
                 return response.json();
             } else {
                 return response.json();
@@ -168,6 +171,7 @@ function followUser(button) {
                 button.classList.remove('btn-success');
                 button.classList.add('btn-secondary');
                 button.setAttribute('data-following', 'true');
+                followersNum.innerText = parseInt(followersNum.innerText) + 1;
                 return response.json();
             } else {
                 return response.json();
