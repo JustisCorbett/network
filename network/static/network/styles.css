@@ -70,3 +70,18 @@ p {
 .bg-primary-blue {
     background-color: #357DED;
 }
+
+.register-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-footer {
+    color: #FCF7F8;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
