@@ -123,7 +123,6 @@ function followUser(button) {
     let isFollowing = button.getAttribute('data-following');
     let baseURL = window.location.origin;
     let followersNum = document.getElementById('followers-num');
-    )
     const csrftoken = getCookie('csrftoken');
     button.setAttribute('disabled', 'true');
     console.log(isFollowing);
