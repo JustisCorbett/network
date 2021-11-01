@@ -66,3 +66,7 @@ p {
     margin-top: 15px;
     align-self: center;
 }
+
+.bg-primary {
+    background-color: #357DED;
+}
