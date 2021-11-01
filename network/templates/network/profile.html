@@ -22,7 +22,7 @@
         {% for post in page_obj %}
             <div class="post-container" data-post="{{ post.id }}">
                 <div class="post">
-                    <h6><a href="profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
+                    <h6><a href="/profile/{{ post.user }}">{{ post.user }}</a> posted at {{ post.date}}</h6>
                     <p class="post-text">{{ post.text }}</p>
                     <span>Likes: </span>
                     <span class="num-likes">{{ post.num_likes }}</span>
