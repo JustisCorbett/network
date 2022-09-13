@@ -4,12 +4,13 @@
 
 {% block body %}
 
-    <h2>Register</h2>
+    
 
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}
     <div class="register-form-container">
+        <h2 class="main-title">Register</h2>
         <form class="register-form" action="{% url 'register' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
